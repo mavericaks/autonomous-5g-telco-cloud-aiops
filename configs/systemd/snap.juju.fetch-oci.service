@@ -1,0 +1,20 @@
+[Unit]
+# Auto-generated, DO NOT EDIT
+Description=Service for snap application juju.fetch-oci
+Requires=snap-juju-36360.mount
+Wants=network.target
+After=snap-juju-36360.mount network.target snapd.apparmor.service
+X-Snappy=yes
+
+[Service]
+EnvironmentFile=-/etc/environment
+ExecStart=/usr/bin/snap run juju.fetch-oci
+SyslogIdentifier=juju.fetch-oci
+Restart=no
+WorkingDirectory=/var/snap/juju/36360
+TimeoutStopSec=35s
+TimeoutStartSec=1m0s
+Type=oneshot
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,17 @@
+[Unit]
+Description=srsRAN 5G SA User Equipment 2 (UE 2)
+After=network.target network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/ubuntu/5g-ran
+ExecStartPre=-/usr/bin/ip netns add ue2
+ExecStart=/usr/bin/srsue /home/ubuntu/5g-ran/ue2_sa.conf
+Restart=always
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

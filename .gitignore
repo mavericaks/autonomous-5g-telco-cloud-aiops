@@ -1,0 +1,40 @@
+# Python bytecode & caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv/
+venv/
+
+# Large live data warehouse & vault symlinks (stored on /data and /data_16tb)
+cross_layer_dataset
+golden_state_vault
+*.db
+*.db-wal
+*.db-shm
+*.jsonl.gz
+*.tar
+*.tar.gz
+
+# LaTeX build intermediates
+report_build/*.aux
+report_build/*.log
+report_build/*.out
+report_build/*.toc
+report_build/*.lof
+report_build/*.lot
+report_build/*.fls
+report_build/*.fdb_latexmk
+report_build/*.synctex.gz
+
+# OS / Editor files
+.DS_Store
+*.swp
+*~
+
+
+# Explicitly track the compact Golden State Cloud Recovery Bundle in GitHub Cloud
+!golden_state_cloud_bundle/*.tar.gz
+!golden_state_cloud_bundle/*.gz
+!golden_state_cloud_bundle/*.npz
+!golden_state_cloud_bundle/**

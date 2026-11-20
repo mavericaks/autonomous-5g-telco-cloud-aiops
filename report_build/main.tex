@@ -1,0 +1,79 @@
+\documentclass[12pt,a4paper]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[ top=1in, bottom=1in, left=1.25in, right=1in, headheight=15pt ]{geometry}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{pdfpages}
+\usepackage[colorlinks=false, pdfborder={0 0 1}, linkbordercolor={1 0 0}, citebordercolor={0 1 0}]{hyperref}
+
+\onehalfspacing
+\setlength{\parindent}{1.5em}
+\setlength{\parskip}{0.4em}
+
+% Configure headers and footers to match the KLE Tech Reference Report exactly
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\scriptsize\textit{Cross-Layer Fault Detection and Recovery through Agentic AI for AI-Native Data Centers}}
+\fancyfoot[L]{\scriptsize\textit{School of Computer Science \& Engineering (AI), KLE Technological University, Hubballi - 31.}}
+\fancyfoot[R]{\scriptsize\thepage}
+\renewcommand{\headrulewidth}{0.8pt}
+\renewcommand{\footrulewidth}{0.5pt}
+
+% Also apply the same footer to chapter-opening plain pages
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyhead[R]{\scriptsize\textit{Cross-Layer Fault Detection and Recovery through Agentic AI for AI-Native Data Centers}}%
+  \fancyfoot[L]{\scriptsize\textit{School of Computer Science \& Engineering (AI), KLE Technological University, Hubballi - 31.}}%
+  \fancyfoot[R]{\scriptsize\thepage}%
+  \renewcommand{\headrulewidth}{0.8pt}%
+  \renewcommand{\footrulewidth}{0.5pt}%
+}
+
+% Code listing style
+\definecolor{codebg}{rgb}{0.97,0.98,0.99}
+\definecolor{codeframe}{rgb}{0.2,0.3,0.5}
+\definecolor{codekw}{rgb}{0.1,0.2,0.7}
+\definecolor{codecmt}{rgb}{0.25,0.5,0.35}
+\definecolor{codestr}{rgb}{0.6,0.1,0.1}
+
+\lstset{
+    backgroundcolor=\color{codebg},
+    frame=single,
+    rulecolor=\color{codeframe},
+    basicstyle=\ttfamily\scriptsize\linespread{1.05}\selectfont,
+    keywordstyle=\color{codekw}\bfseries,
+    commentstyle=\color{codecmt}\itshape,
+    stringstyle=\color{codestr},
+    breaklines=true,
+    breakatwhitespace=true,
+    showstringspaces=false,
+    captionpos=b,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    numbersep=6pt,
+    xleftmargin=12pt,
+    xrightmargin=4pt
+}
+
+\begin{document}
+
+\input{part1_front_and_ch1_ch2.tex}
+\input{part2_ch3_ch4.tex}
+\input{part3_ch5_ch6_ch7_ref.tex}
+
+\end{document}
+

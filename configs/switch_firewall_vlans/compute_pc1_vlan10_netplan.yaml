@@ -1,0 +1,17 @@
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp1s0:
+      match:
+        macaddress: "00:e0:21:84:f3:5c"
+      set-name: enp1s0
+      addresses:
+        - 10.10.10.4/24
+      routes:
+        - to: default
+          via: 10.10.10.2
+      nameservers:
+        addresses: [10.10.10.2]
+        search: [maas]
+      mtu: 1500

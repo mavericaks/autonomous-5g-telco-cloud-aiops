@@ -1,0 +1,14 @@
+[Unit]
+Description=MCP-SecOps Wazuh SIEM and Active Response Server (:8103)
+After=network.target
+
+[Service]
+Type=simple
+User=hpe
+WorkingDirectory=/home/hpe
+ExecStart=/usr/bin/python3 /home/hpe/mcp_http_daemon.py mcp-secops /home/hpe/mcp-secops/src/server.py 8103
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

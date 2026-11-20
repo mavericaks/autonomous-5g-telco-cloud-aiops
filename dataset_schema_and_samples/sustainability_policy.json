@@ -1,0 +1,15 @@
+{
+  "storage_mount": "/data",
+  "storage_device": "/dev/sda1 (2.9 TB Enterprise Volume)",
+  "sampling_interval_seconds": 5.0,
+  "active_stream_max_size_mb": 250,
+  "partition_rotation_cadence": "hourly_or_250MB",
+  "cold_archive_compression": "gzip (level 6, ~8.5x compression ratio)",
+  "disk_usage_high_watermark_pct": 80.0,
+  "disk_usage_critical_watermark_pct": 90.0,
+  "sqlite_journal_mode": "WAL (Write-Ahead Logging, non-blocking concurrent reads)",
+  "sqlite_max_hot_rows": 250000,
+  "cursor_persistence_file": "/data/cross_layer_dataset/04_schema_and_governance/log_cursors.json",
+  "systemd_service": "omni-crosslayer-harvester.service",
+  "systemd_restart_policy": "always (RestartSec=3s)"
+}

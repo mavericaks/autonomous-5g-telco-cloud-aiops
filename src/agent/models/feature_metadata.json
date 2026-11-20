@@ -1,0 +1,26 @@
+{
+  "features": [
+    "cpu_load_pct",
+    "controller_mem_pct",
+    "healthy_pod_count",
+    "amf_gnb_connected",
+    "gnb_service_active",
+    "ue1_service_active",
+    "ue2_service_active",
+    "prach_rssi_db",
+    "prach_snr_db",
+    "prach_ta_us",
+    "prach_sinr",
+    "dropped_packets",
+    "pusch_crc_ok"
+  ],
+  "classes": [
+    "compute_cpu_exhaustion",
+    "k8s_container_crash",
+    "nominal",
+    "ovn_sdn_latency_loss",
+    "rf_path_loss_attenuation"
+  ],
+  "trained_samples": 25537,
+  "test_accuracy": 0.9996867658574785
+}

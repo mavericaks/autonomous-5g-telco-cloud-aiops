@@ -1,0 +1,16 @@
+[Unit]
+Description=Omni-Plane Cross-Layer Multi-Dimensional Telemetry, Log, Alert & Security Event Harvester
+After=network.target
+
+[Service]
+Type=simple
+User=hpe
+WorkingDirectory=/data/cross_layer_dataset/bin
+ExecStart=/usr/bin/python3 /data/cross_layer_dataset/bin/omni_harvester_daemon.py
+Restart=always
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

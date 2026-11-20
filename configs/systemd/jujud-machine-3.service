@@ -1,0 +1,21 @@
+[Unit]
+Description=juju agent for machine-3
+Requires=network.target
+Requires=local-fs.target
+Wants=lxd-agent.target
+After=syslog.target
+After=network.target
+After=local-fs.target
+After=lxd-agent.target
+After=systemd-user-sessions.service
+
+[Service]
+LimitNOFILE=64000
+ExecStart=/etc/systemd/system/jujud-machine-3-exec-start.sh
+Restart=on-failure
+TimeoutSec=300
+
+[Install]
+WantedBy=multi-user.target
+
+

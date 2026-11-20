@@ -1,0 +1,19 @@
+[Unit]
+# Auto-generated, DO NOT EDIT
+Description=Service for snap application prometheus-ovs-exporter.ovs-exporter
+Requires=snap-prometheus\x2dovs\x2dexporter-9.mount
+Wants=network.target
+After=snap-prometheus\x2dovs\x2dexporter-9.mount network.target snapd.apparmor.service
+X-Snappy=yes
+
+[Service]
+EnvironmentFile=-/etc/environment
+ExecStart=/usr/bin/snap run prometheus-ovs-exporter.ovs-exporter
+SyslogIdentifier=prometheus-ovs-exporter.ovs-exporter
+Restart=on-failure
+WorkingDirectory=/var/snap/prometheus-ovs-exporter/9
+TimeoutStopSec=30s
+Type=simple
+
+[Install]
+WantedBy=multi-user.target

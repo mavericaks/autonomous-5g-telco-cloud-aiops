@@ -1,0 +1,21 @@
+network:
+  version: 2
+  renderer: NetworkManager
+  ethernets:
+    eno8303:
+      addresses:
+        - 10.0.0.10/24
+      routes:
+        - to: default
+          via: 10.0.0.1
+      nameservers:
+        addresses: [8.8.8.8, 1.1.1.1]
+    enp171s0f0np0: {}
+  bridges:
+    br-data:
+      interfaces: [enp171s0f0np0]
+      addresses: [10.10.10.2/24]
+      macaddress: 04:32:01:ca:9f:50
+      parameters:
+        stp: false
+        forward-delay: 0

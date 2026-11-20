@@ -1,0 +1,14 @@
+[Unit]
+Description=Universal TCP/HTTP Gateway & AWS/Azure OpenStack Cloud Portal
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/hpe
+ExecStart=/usr/bin/python3 /home/hpe/k8s_and_cloud_gateway.py
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

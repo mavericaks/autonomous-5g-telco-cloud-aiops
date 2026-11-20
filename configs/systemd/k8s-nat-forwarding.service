@@ -1,0 +1,11 @@
+[Unit]
+Description=K8s OVN NAT and Forwarding
+After=network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/bash -c "sysctl -w net.ipv4.ip_forward=1 && iptables -t nat -I POSTROUTING -s 172.31.254.0/24 -o eno8303 -j MASQUERADE || true && iptables -I FORWARD -j ACCEPT || true"
+
+[Install]
+WantedBy=multi-user.target

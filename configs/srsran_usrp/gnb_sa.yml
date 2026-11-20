@@ -1,0 +1,43 @@
+# 5G SA gNodeB configuration for Dell Telco Cloud Testbed
+amf:
+  addr: 192.168.100.174
+  port: 31412
+  bind_addr: 10.10.10.4
+
+ru_sdr:
+  device_driver: uhd
+  device_args: serial=34B18C8
+  clock: internal
+  sync: internal
+  srate: 11.52
+  tx_gain: 70
+  rx_gain: 60
+
+cell_cfg:
+  dl_arfcn: 368500
+  band: 3
+  channel_bandwidth_MHz: 10
+  common_scs: 15
+  plmn: "99970"
+  tac: 1
+  pdcch:
+    dedicated:
+      ss2_type: common
+      dci_format_0_1_and_1_1: false
+
+metrics:
+  rlc_report_period: 1000
+  cu_cp_statistics_report_period: 1
+  cu_up_statistics_report_period: 1
+  enable_json_metrics: true
+  json_metrics_filename: /tmp/gnb_metrics.json
+
+log:
+  filename: /home/ubuntu/5g-ran/gnb.log
+  all_level: info
+
+pcap:
+  mac_enable: enable
+  mac_filename: /home/ubuntu/5g-ran/gnb_mac.pcap
+  ngap_enable: enable
+  ngap_filename: /home/ubuntu/5g-ran/gnb_ngap.pcap

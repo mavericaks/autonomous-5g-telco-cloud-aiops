@@ -1,0 +1,14 @@
+[Unit]
+Description=Unified Multi-Domain Prometheus Exporter (:9105)
+After=network.target
+
+[Service]
+Type=simple
+User=hpe
+WorkingDirectory=/home/hpe
+ExecStart=/usr/bin/python3 /home/hpe/multi_domain_exporter.py
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

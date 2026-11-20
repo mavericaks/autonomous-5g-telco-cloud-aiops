@@ -1,0 +1,228 @@
+% ==============================================================================
+% PART 1: FRONT MATTER, CHAPTER 1 (INTRODUCTION), CHAPTER 2 (REQUIREMENT ANALYSIS)
+% ==============================================================================
+
+% ---- TITLE PAGE \& CERTIFICATE PAGE (Exact Official KLE Tech Layout) ----
+\includepdf[pages={1,2}]{/home/hpe/HPE/Final Report Reference.pdf}
+
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+% ---- ACKNOWLEDGEMENT ----
+\chapter*{ACKNOWLEDGEMENT}
+\thispagestyle{plain}
+We would like to thank our faculty and management for their professional guidance towards the completion of the project work. We take this opportunity to thank Dr. Ashok Shettar, Pro-Chancellor, Dr. P.G. Tewari, Vice-Chancellor, and Dr. B.S. Anami, Registrar for their vision, institutional infrastructure, and unwavering support in establishing the high-performance AI-Native Telco-Cloud laboratory.
+
+\vspace{0.4cm}
+We also take this opportunity to thank Dr. Meena S.M., Professor and Dean of Faculty, SoCSE, and Dr. Narayan D.G., Professor and Head of the Department of Computer Science and Engineering (AI), for having provided us strategic direction, bare-metal server infrastructure, and continuous encouragement for the enhancement of our engineering skills and academic growth.
+
+\vspace{0.4cm}
+We express our deepest gratitude to our guide, Prof. Nagarathna Kulenavar, Department of Computer Science and Engineering (AI), for her constant mentorship, rigorous technical reviews, and invaluable insights throughout the design, mathematical formulation, and bare-metal deployment of this autonomous fault detection and recovery framework.
+
+\vspace{0.4cm}
+We extend our sincere acknowledgment to the review committee members, project coordinator Dr. Uday Kulkarni, Mr. Sunil V. Gurlahosur, and laboratory technical staff for their critical suggestions and support during the integration of the Dell PowerEdge R760xs cluster, OpenStack cloud, Kubernetes 5G core, and USRP B210 Software-Defined Radios. Finally, we express our heartfelt gratitude to our beloved parents for their constant encouragement and support.
+
+\vspace{0.7cm}
+\begin{flushright}
+\textbf{Akshat Dodwad -- 01FE23BCI045}\\
+\textbf{Naveen Huggi -- 01FE23BCI056}\\
+\textbf{Abhishek Manage -- 01FE23BCI116}\\
+\textbf{Riya A Magadum -- 01FE23BCI096}
+\end{flushright}
+
+\newpage
+
+% ---- ABSTRACT ----
+\chapter*{ABSTRACT}
+\addcontentsline{toc}{chapter}{ABSTRACT}
+\thispagestyle{plain}
+
+Modern AI-native data centers and 5G telecom clouds are characterized by extraordinary architectural complexity, spanning physical bare-metal servers, Software-Defined Radio (SDR) wireless transceivers, OpenStack hardware virtualization hypervisors, Open Virtual Network (OVN) Geneve Software-Defined Networking (SDN) overlays, Kubernetes container orchestration clusters, distributed multi-GPU tensor accelerators, and enterprise security monitoring fabrics. When an operational fault occurs at a lower infrastructure layer---such as an Open vSwitch (OVS) Geneve tunnel dropping encapsulated packets, a compute host experiencing noisy-neighbor CPU saturation, a 5G User Plane Function (UPF) pod crashing, or a physical USRP B210 radio channel suffering severe Signal-to-Interference-plus-Noise Ratio (SINR) degradation---the resulting anomaly rapidly cascades upward across abstraction boundaries. This vertical and horizontal fault propagation triggers simultaneous ``alert storms'' across dozens of downstream microservices and network functions. Conventional Site Reliability Engineering (SRE) workflows that rely on human operators or static threshold alerting rules fail to distinguish upstream root causes from downstream leaf symptoms, resulting in severe Mean Time To Resolution (MTTR) penalties and prolonged Service Level Agreement (SLA) violations.
+
+To overcome this fundamental limitation, this project presents \textbf{Cross-Layer Fault Detection and Recovery through Agentic AI for AI-Native Data Centers}, a production-grade, closed-loop autonomous SRE and Active Cyber-Defense architecture deployed on a live multi-node bare-metal telco-cloud testbed. The physical infrastructure comprises a dual-socket \textbf{Dell PowerEdge R760xs} central controller (96 logical CPU threads with Intel AVX-512/AMX, 503 GiB DDR5 ECC RAM), two dedicated bare-metal \textbf{OpenStack Nova Compute Nodes} (\texttt{compute-pc1} at \texttt{10.10.10.4} and \texttt{compute-pc2} at \texttt{10.10.10.5}) equipped with \textbf{Intel UHD Graphics 770 GPUs} delivering \textbf{951.82 GFLOPS} of combined cluster tensor throughput, a dedicated \textbf{Windows AI Jump Host} (\texttt{10.0.0.21}) serving the \textbf{Qwen3-14B} Large Language Model via Ollama, a \textbf{Juniper SRX300} security gateway with \textbf{Juniper Mist Wi-Fi 6} enterprise telemetry, and four physical \textbf{Ettus Research USRP B210 SDRs} operating a live 3GPP Release 17 \textbf{srsRAN 5G gNodeB} and multi-UE radio access network in Band n78 (3.5 GHz). Hosted atop OpenStack 2023.1 (Antelope) and OVN Geneve SDN tunnels is a 3-node \textbf{Magnum Kubernetes Cluster (v1.23.3)} running 13 cloud-native \textbf{Open5GS 5G Standalone Core} network functions and 11 \textbf{Google Online Boutique} e-commerce microservices, guarded by a 4-node \textbf{Wazuh v4.8.0 XDR/SIEM} active defense plane.
+
+At the core of the autonomous control plane is the \textbf{Explainable Intelligence Engine (XIE)}, a hybrid mathematical critic that continuously ingests a 54-dimensional cross-layer telemetry vector every 5 seconds. The XIE framework combines (1) rolling Z-score standardization and a 200-tree Balanced Random Forest ensemble for sub-second anomaly flagging, (2) Vector Autoregression $\text{VAR}(2)$ Granger causality F-tests to dynamically discover directed cross-layer dependency graphs, (3) \textbf{Reversed-DAG Personalized PageRank (PPR)} ($\boldsymbol{\pi} = (1-\alpha)(\mathbf{I}-\alpha\mathbf{P})^{-1}\mathbf{v}$) over transposed causal adjacency matrices to mathematically isolate true upstream root-cause nodes while suppressing downstream symptom noise, and (4) a \textbf{ChromaDB HNSW Vector Episodic Memory} store containing 2,731 verified historical fault episodes for sub-15ms zero-shot recall. Validated root-cause diagnoses are dispatched through four domain-specialized \textbf{Model Context Protocol (MCP)} servers---\texttt{mcp-dcops} (\texttt{:8001}), \texttt{mcp-devops} (\texttt{:8002}), \texttt{mcp-secops} (\texttt{:8003}), and \texttt{mcp-aiops} (\texttt{:8004})---to execute surgical self-healing actions, while asynchronously invoking \textbf{Qwen3-14B} to synthesize executive Markdown post-mortem reports.
+
+Extensive empirical evaluation over \textbf{119.5 hours} of continuous live operation (\textbf{73,413 telemetry snapshots}, \textbf{1,857 autonomous infrastructure remediations}, and \textbf{114,479 Wazuh SIEM security events}) demonstrates that the proposed framework achieves a \textbf{98.8\% overall root-cause classification accuracy} (\textbf{97.4\% under cascading multi-layer stress}) and reduces average end-to-end data-plane \textbf{MTTR from 480--940 seconds (manual SRE) to 2.41 seconds}---a \textbf{99.6\% latency reduction}.
+
+\vspace{0.5cm}
+\noindent\textbf{\textit{Keywords:}} \textit{Agentic AI, Autonomous SRE, Explainable Intelligence Engine (XIE), Reversed-DAG Personalized PageRank, Vector Autoregression Granger Causality, Spatio-Temporal Graph Neural Networks, Model Context Protocol (MCP), ChromaDB Episodic Memory, OpenStack Antelope, Open5GS 5G Core, USRP B210 SDR, Wazuh SIEM Active Defense, Qwen3-14B.}
+
+\newpage
+
+% ---- TABLE OF CONTENTS, LIST OF TABLES, LIST OF FIGURES ----
+\addcontentsline{toc}{chapter}{CONTENTS}
+\tableofcontents
+\newpage
+
+\addcontentsline{toc}{chapter}{LIST OF TABLES}
+\listoftables
+\newpage
+
+\addcontentsline{toc}{chapter}{LIST OF FIGURES}
+\listoffigures
+\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+% ==============================================================================
+% CHAPTER 1: INTRODUCTION
+% ==============================================================================
+\chapter{INTRODUCTION}
+
+\section{Motivation}
+The rapid convergence of Artificial Intelligence (AI), 5G Standalone (SA) mobile networks, and cloud-native microservices has fundamentally transformed modern data center architecture. Contemporary AI-native data centers no longer consist of homogeneous virtual machines executing isolated workloads. Instead, they operate as deeply stratified, multi-plane cyber-physical ecosystems in which five distinct infrastructure layers interact continuously at millisecond timescales:
+\begin{enumerate}
+    \item \textbf{Layer A -- Physical Bare-Metal Hardware, RF Spectrum, and Edge Fabric:} High-density multi-socket enterprise servers (such as the 96-thread Dell PowerEdge R760xs), physical Software-Defined Radio (SDR) transceivers (Ettus USRP B210 units operating in 3GPP Band n78), enterprise Wi-Fi 6 access points (Juniper Mist), and hardware perimeter firewalls (Juniper SRX300).
+    \item \textbf{Layer B -- Hardware Virtualization and Software-Defined Networking (SDN):} OpenStack compute hypervisors (KVM/QEMU), Open Virtual Network (OVN) controllers, and Open vSwitch (OVS) integration bridges (\texttt{br-int}, \texttt{br-ex}) interconnected via UDP-encapsulated Geneve overlay tunnels (\texttt{ovn0-compu-0}, \texttt{ovn0-compu-1}) monitored by Bidirectional Forwarding Detection (BFD).
+    \item \textbf{Layer C -- Container Orchestration and Cloud-Native Service Mesh:} Nested Kubernetes clusters provisioned via OpenStack Magnum running latency-critical 3GPP Release 17 5G Core control and user plane functions (Open5GS AMF, SMF, UPF, NRF, AUSF, UDM, UDR, PCF, NSSF, BSF, SCP) alongside distributed e-commerce microservices (Google Online Boutique).
+    \item \textbf{Layer D -- Distributed Heterogeneous AI Compute Accelerators:} Multi-node tensor acceleration fabrics combining server-grade Intel Xeon Advanced Matrix Extensions (AVX-512/AMX), discrete/integrated GPU compute nodes (Dual Intel UHD Graphics 770 GPUs rendering 951.82 GFLOPS of continuous matrix throughput), and dedicated Large Language Model (LLM) inference hosts running 14-billion-parameter reasoning models (\texttt{qwen3:14b}).
+    \item \textbf{Layer E -- Cyber-Defense and Host Intrusion Detection (XDR/SIEM):} Real-time log analysis, file integrity monitoring, kernel audit inspection, and active firewall remediation managed by Wazuh SIEM across all bare-metal and virtualized endpoints.
+\end{enumerate}
+
+While this five-layer disaggregation provides unprecedented elasticity and resource utilization, it introduces a severe operational fragility known as \textbf{cross-layer fault cascading}. Because virtualized network functions and containerized microservices depend directly on underlying SDN tunnels, hypervisor CPU schedulers, database replication groups, and physical RF channels, a single localized degradation at a lower layer propagates vertically and horizontally within seconds. For example, when an Open vSwitch Geneve tunnel interface on a compute node experiences packet drops or MTU fragmentation, the Kubernetes worker node hosted inside a Nova KVM instance loses N3 GTP-U user-plane continuity. Within 2 to 5 seconds, the Open5GS User Plane Function (\texttt{open5gs-upf}) reports session drops, the USRP B210 User Equipment (UE) experiences throughput collapse, and the Online Boutique frontend service suffers HTTP 5xx timeouts.
+
+In traditional Network Operations Centers (NOCs) and Site Reliability Engineering (SRE) workflows, this single underlying fault triggers an overwhelming \textbf{alert storm}: Prometheus fires container latency alerts, Open5GS logs NGAP/GTP-U timeouts, and application monitors flag checkout failures. Human operators are forced to manually correlate logs across Horizon dashboards, \texttt{kubectl} terminals, OVS bridge tables, and SDR spectrum analyzers. Empirical industry studies show that manual cross-layer triage requires 15 to 45 minutes per incident, while naive rule-based automation (which reacts to the first symptom that crosses a static threshold) frequently restarts healthy downstream application pods while leaving the broken underlying SDN tunnel or saturated hypervisor untouched. Consequently, there is an urgent engineering need for a mathematically rigorous, topology-aware, and deterministic \textbf{Agentic AI SRE framework} capable of isolating the true upstream root cause in sub-second timeframes and executing surgical, guardrailed recovery across all five operational planes within seconds.
+
+\section{Literature Review}
+The challenge of automating fault diagnosis and recovery in distributed cloud and telecommunication infrastructures has attracted significant research across machine learning, graph theory, and autonomous systems. Existing methodologies can be categorized into four primary paradigms:
+
+\textbf{1. Static Thresholding and Rule-Based Playbooks (AIOps 1.0):} Early cloud monitoring platforms rely on univariate threshold rules configured in tools such as Nagios, Zabbix, OpenStack Aodh, and Prometheus Alertmanager \cite{kolla2023, prometheus2022}. When a metric $x_i(t)$ exceeds a static upper bound $\tau_i$, a predefined Ansible playbook or shell script is triggered. While computationally lightweight, static rules suffer from high false-positive rates under diurnal traffic fluctuations and fail completely during cascading outages because they treat every symptom independently without topological context.
+
+\textbf{2. Supervised Machine Learning and Ensemble Classifiers:} To capture multivariate correlations across telemetry streams, researchers have applied Random Forests, Gradient Boosted Decision Trees (XGBoost), and Support Vector Machines to labeled cloud outage datasets \cite{breiman2001, chen2016}. In particular, Balanced Random Forests with inverse class-frequency weighting handle severe class imbalance between normal operation and rare fault states. However, purely tabular classifiers lack explicit structural representations of network topology and cannot generalize to unseen cascading propagation paths when multiple subsystems degrade simultaneously.
+
+\textbf{3. Time-Series Causal Discovery and Graph-Based Root Cause Attribution:} Foundational work by Granger \cite{granger1969} established that directed temporal causation between time series can be statistically tested using Vector Autoregression ($\text{VAR}(L)$) F-tests. Building upon causal graphs, systems such as CauseInfer \cite{chen2014causeinfer} and MicroCause \cite{meng2020microcause} construct dependency Directed Acyclic Graphs (DAGs) among microservices and apply random-walk centrality measures such as PageRank \cite{page1999pagerank}. Furthermore, Spatio-Temporal Graph Neural Networks (ST-GNNs) \cite{kipf2017gcn, yu2018stgcn} combine Graph Convolutional Networks (GCNs) with Long Short-Term Memory (LSTM) networks \cite{hochreiter1997lstm} to learn joint spatial-temporal embeddings. Nevertheless, standard graph attribution schemes frequently suffer from \textit{forward-propagation bias}: because faults flow from upstream root causes to numerous downstream leaf nodes, un-reversed random walks accumulate probability mass at the leaf symptoms rather than tracing backward to the origin.
+
+\textbf{4. Large Language Model (LLM) Agents and Model Context Protocol (MCP):} Recent advances in foundation models have enabled ReAct (Reasoning + Acting) agents \cite{yao2023react} and standardized tool-calling interfaces via the Model Context Protocol (MCP) \cite{anthropic2024mcp}. LLM-based SRE prototypes can parse unstructured logs and synthesize human-readable post-mortem reports. However, deploying raw LLMs directly in the critical remediation loop introduces three major hazards: (i) multi-second token generation latency (10--60 seconds) that violates sub-3s telecom SLA recovery budgets, (ii) non-deterministic hallucinations that risk executing destructive shell commands on production hypervisors, and (iii) lack of fast episodic vector memory \cite{malkov2018hnsw} to immediately resolve recurring operational faults.
+
+Table \ref{tab:lit_review} presents a structured comparison of representative prior works against the proposed hybrid XIE + 4-MCP Agentic AI architecture.
+
+\begin{table}[!htb]
+\centering
+\caption{Comparative Analysis of Existing Cloud \& Telecom Fault Management Frameworks vs. Proposed System.}
+\label{tab:lit_review}
+\renewcommand{\arraystretch}{1.25}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}p{3.2cm}p{2.8cm}p{3.2cm}p{3.5cm}p{3.8cm}@{}}
+\toprule
+\textbf{Framework / Author} & \textbf{Core Methodology} & \textbf{Infrastructure Scope} & \textbf{Key Limitations} & \textbf{Proposed System Advantage} \\ \midrule
+Prometheus Alertmanager \& Aodh \cite{prometheus2022} & Static univariate thresholds \& webhook scripts & Single-layer K8s or OpenStack VMs & Blind to cross-layer cascades; triggers massive alert storms & 54-metric Z-score + VAR(2) Granger causal graph eliminates alert storms \\
+CauseInfer / MicroCause \cite{chen2014causeinfer, meng2020microcause} & PC-algorithm causal graph + standard PageRank & Application-tier microservices only & Recomputes graphs slowly; lacks bare-metal, SDN, and 5G RAN visibility & Reversed-DAG PPR ($\alpha=0.85$) spans 5 planes (RAN, SDN, K8s, GPU, SIEM) \\
+ST-GNN Cloud Critic \cite{kipf2017gcn, yu2018stgcn} & Spatial GCN + Temporal LSTM classification & Nested OpenStack \& K8s containers & Requires training data for all cascades; no episodic memory recall & Combines ST-GNN/RF with ChromaDB HNSW memory (93.8\% $<15\text{ms}$ hit rate) \\
+Pure ReAct LLM SRE Agents \cite{yao2023react} & Cloud LLM API prompting + SSH tool execution & Virtualized cloud testbeds & High latency (15--45s); external API rate limits; hallucination risk & Sub-3s deterministic MCP execution + local Dual-GPU Qwen3-14B async RCA \\
+Wazuh Active Response \cite{wazuh2024} & Rule-based HIDS log matching + firewall drop & Host OS security only & Isolated from cloud SDN, 5G core health, and AI causal memory & Unified AIOps + SecOps via \texttt{mcp-secops} (:8003) and ChromaDB audit \\ \bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\section{Research Gaps}
+Based on our extensive literature analysis and empirical benchmarking on bare-metal telco-cloud hardware, we identify five critical research and engineering gaps in existing state-of-the-art systems:
+\begin{enumerate}
+    \item \textbf{Gap 1 -- Cross-Layer Visibility Blindness Across SDR RAN, SDN, Cloud, and GPU Planes:} Existing AIOps frameworks monitor either Kubernetes pods or OpenStack virtual machines in isolation. No existing architecture unifies physical USRP B210 5G radio metrics (SINR, RSRP, BLER), Open vSwitch Geneve SDN tunnel counters, OpenStack KVM hypervisor resource utilization, Kubernetes Open5GS 5G Core pod health, Dual-GPU tensor workloads, and Wazuh SIEM security alerts into a single synchronized state vector.
+    \item \textbf{Gap 2 -- Forward-Propagation Bias in Graph Root-Cause Attribution:} In a directed causal graph $G=(V,E)$ where edges $(i \to j)$ represent fault propagation from cause $i$ to symptom $j$, standard centrality algorithms walk forward toward sink nodes. Consequently, leaf symptoms (such as HTTP frontend latency or UE throughput drop) receive artificially inflated scores compared to the true upstream root cause (such as an OVS Geneve tunnel drop or compute CPU hog).
+    \item \textbf{Gap 3 -- Absence of Sub-Millisecond Episodic Vector Memory for Recurring Faults:} Re-running full causal discovery or deep neural inference from scratch on every recurring operational anomaly wastes valuable recovery time. Existing systems lack a self-evolving vector episodic memory (such as Hierarchical Navigable Small World [HNSW] cosine similarity indexing) that memorizes verified $(\text{anomaly signature}, \text{root cause}, \text{remediation action})$ tuples for instant zero-shot recall.
+    \item \textbf{Gap 4 -- Latency vs. Reasoning Tradeoff in LLM-Driven Remediation:} Placing a Large Language Model directly in the synchronous remediation path introduces 15 to 45 seconds of token generation delay and exposes production infrastructure to hallucinated commands. A decoupled architecture is required where mathematical critics and deterministic Model Context Protocol (MCP) servers restore the data plane in under 3 seconds, while a local 14B LLM (\texttt{qwen3:14b}) synthesizes deep causal post-mortems asynchronously.
+    \item \textbf{Gap 5 -- Disjoint Reliability (AIOps) and Cyber-Security (SecOps) Orchestration:} In real-world data centers, cyber attacks (such as high-rate SSH brute-force floods or unauthorized privilege escalations) induce resource exhaustion that mimics hardware or network faults. Existing SRE tools and SIEM platforms operate in complete silos without a shared MCP control plane.
+\end{enumerate}
+
+\section{Problem Definition}
+Consider a heterogeneous, multi-node AI-native telco-cloud data center consisting of $N$ physical and virtualized infrastructure entities spanning five operational planes: Physical RF/Hardware ($L_1$), OpenStack Hypervisor \& OVN Geneve SDN ($L_2$), Kubernetes 5G Core \& Microservices ($L_3$), Distributed Dual-GPU/AMX AI Compute ($L_4$), and Wazuh SIEM Security ($L_5$). At each discrete sampling epoch $t \in \{1, 2, \dots, T\}$ spaced by $\Delta t = 5\text{ s}$, the monitoring fabric collects an $M$-dimensional cross-layer telemetry vector ($M=54$):
+\begin{equation}
+\mathbf{x}(t) = \left[ x_1(t), x_2(t), \dots, x_M(t) \right]^\top \in \mathbb{R}^M
+\end{equation}
+When an unknown fault or cyber-attack $f \in \mathcal{F}$ originates at an upstream subsystem $i^* \in \{1, \dots, M\}$ at time $t_0$, its effects propagate along directed structural and temporal dependencies to corrupt a subset of downstream metrics $\mathcal{S}_{\text{symptom}}(t) \subset \{1, \dots, M\}$.
+
+The formal engineering problem is to design, mathematically formulate, and implement an out-of-band autonomous agentic control plane $(\Theta, \Pi)$ that:
+\begin{enumerate}
+    \item Detects the onset of any cross-layer anomaly from the sliding window matrix $\mathbf{X}_t = [\mathbf{x}(t-W+1), \dots, \mathbf{x}(t)]^\top \in \mathbb{R}^{W \times M}$ within a Mean Time To Detect ($\text{MTTD}$) of less than $1.0\text{ s}$;
+    \item Accurately isolates the true upstream root-cause component $i^* \in V$ with $\ge 98\%$ diagnostic precision despite multi-layer cascading symptom noise;
+    \item Dispatches a verified, guardrailed remediation tool call $a^* = \Pi(i^*, \mathbf{z}(t)) \in \mathcal{A}$ through standardized Model Context Protocol (MCP) servers to restore full end-to-end SLA compliance within a Mean Time To Resolution ($\text{MTTR}$) of less than $3.0\text{ s}$; and
+    \item Generates an explainable, human-auditable root-cause post-mortem report via local LLM inference without blocking data-plane recovery.
+\end{enumerate}
+
+\section{Objectives of the Project}
+To solve the defined problem and address all five research gaps, the specific objectives of this project are:
+\begin{enumerate}
+    \item \textbf{Objective 1 -- Multi-Node Bare-Metal \& 5G Telco-Cloud Testbed Engineering:} To architect and deploy a 5-plane production testbed integrating a Dell PowerEdge R760xs controller (96 threads, 503 GiB RAM), two OpenStack Nova compute nodes with Dual Intel UHD 770 GPUs (951.82 GFLOPS), a 3-node Magnum Kubernetes v1.23.3 cluster running 13 Open5GS 5G Core pods and 11 Online Boutique pods, four physical USRP B210 SDRs running srsRAN 5G Band n78, a Juniper SRX300/Mist network fabric, and a 4-node Wazuh v4.8.0 SIEM active defense plane.
+    \item \textbf{Objective 2 -- Mathematical Formulation of the Hybrid XIE Causal Critic:} To formulate and implement a multi-stage mathematical diagnostic engine combining rolling Z-score standardization, a 200-tree Balanced Random Forest ensemble, $\text{VAR}(2)$ Granger causality discovery, and \textbf{Reversed-DAG Personalized PageRank (PPR)} ($\boldsymbol{\pi} = (1-\alpha)(\mathbf{I}-\alpha\mathbf{P})^{-1}\mathbf{v}$) alongside ST-GNN temporal modeling to eliminate forward-propagation symptom bias.
+    \item \textbf{Objective 3 -- Self-Evolving ChromaDB HNSW Episodic Memory:} To design a persistent vector episodic memory store indexing normalized 54-dimensional Z-score fault signatures via HNSW cosine similarity ($s_{\max} \ge 0.85$), enabling sub-15ms zero-shot fault recognition and remediation recall for recurring incidents.
+    \item \textbf{Objective 4 -- Standardized 4-Domain MCP Server Remediation Architecture:} To build four modular FastAPI/MCP microservices---\texttt{mcp-dcops} (\texttt{:8001}), \texttt{mcp-devops} (\texttt{:8002}), \texttt{mcp-secops} (\texttt{:8003}), and \texttt{mcp-aiops} (\texttt{:8004})---orchestrated by a Central Autonomous Agent (\texttt{:9100}) with strict cooldown and policy guardrails.
+    \item \textbf{Objective 5 -- Asynchronous Dual-GPU Qwen3-14B Executive Reporting:} To integrate a local 14-billion-parameter LLM (\texttt{qwen3:14b} on \texttt{10.0.0.21:11434}) that synthesizes telemetry snapshots, PPR attribution scores, and MCP execution logs into comprehensive Markdown post-mortem reports.
+    \item \textbf{Objective 6 -- Rigorous Chaos Engineering \& Empirical Validation:} To evaluate the complete system over 119.5 hours of continuous multi-tier telemetry (73,413 samples, 1,857 remediations, 114,479 Wazuh alerts), benchmarking MTTD, MTTR, confusion matrices, and hyperparameter sensitivity against manual SRE and static/spatial baselines.
+\end{enumerate}
+
+% ==============================================================================
+% CHAPTER 2: REQUIREMENT ANALYSIS
+% ==============================================================================
+\chapter{REQUIREMENT ANALYSIS}
+
+\section{Overview of SRS}
+The Software and System Requirements Specification (SRS) defines the complete functional, non-functional, hardware, software, and interface requirements for the \textbf{Cross-Layer Fault Detection and Recovery through Agentic AI} platform. Following IEEE Std 830-1998 guidelines, the system is engineered as an \textit{out-of-band} autonomous control plane hosted on the Dell PowerEdge R760xs primary server (\texttt{10.10.10.6} / \texttt{10.0.0.10}). By decoupling the telemetry ingestion, mathematical XIE critic, ChromaDB vector store, and MCP remediation servers from the tenant virtual machines and Kubernetes data plane, the SRS guarantees that catastrophic tenant-plane failures (such as a complete Open5GS UPF crash or OVS Geneve bridge stall) never impair the diagnostic or self-healing capabilities of the autonomous agent.
+
+\section{Requirement Specifications}
+
+\subsection*{Functional Requirements}
+\begin{description}[leftmargin=1.2cm, style=nextline]
+    \item[\textbf{FR-1 (Synchronized 54-Metric Cross-Layer Telemetry Ingestion):}] The system shall continuously poll and normalize 54 performance, health, and security metrics across all five infrastructure planes (srsRAN USRP B210 RF, OpenStack KVM/OVN/OVS, Magnum Kubernetes Open5GS \& Online Boutique, Dual-GPU/AMX Compute, and Wazuh SIEM) at a deterministic 5-second sampling interval ($\Delta t = 5\text{ s}$) and persist each snapshot in JSON Lines format (\texttt{5g\_telco\_metrics.jsonl}).
+    \item[\textbf{FR-2 (Sub-Second Statistical \& Ensemble Anomaly Detection):}] The system shall maintain a rolling sliding window of $W=15$ ticks ($75\text{ s}$) for every metric, compute real-time standardized Z-scores $z_i(t)$, and evaluate a 200-tree Balanced Random Forest classifier to flag anomalous states whenever $\max_i |z_i(t)| > 3.0$ or $P_{\text{RF}}(y \neq \text{normal} \mid \mathbf{x}(t)) \ge 0.75$.
+    \item[\textbf{FR-3 (ChromaDB HNSW Episodic Memory Recall \& Upsert):}] Upon flagging an anomaly, the system shall query the ChromaDB vector collection (\texttt{5g\_fault\_episodes}) using cosine similarity over the L2-normalized Z-score vector $\hat{\mathbf{z}}(t)$. If the nearest historical episode satisfies $s_{\max} \ge \tau$ ($\tau = 0.85$), the agent shall immediately retrieve the verified root cause and remediation action in $<15\text{ ms}$; otherwise, after successful novel recovery, it shall upsert the new verified episode into ChromaDB.
+    \item[\textbf{FR-4 (VAR(2) Granger Causal Discovery \& Reversed-DAG PPR Attribution):}] For novel or cascading multi-layer faults, the system shall estimate pairwise $\text{VAR}(2)$ Granger causality F-statistics over the active telemetry window, construct the transposed fault-propagation graph $G_{\text{rev}} = (V, E_{\text{rev}})$, and solve the Personalized PageRank stationary distribution $\boldsymbol{\pi} = (1-\alpha)(\mathbf{I}-\alpha\mathbf{P})^{-1}\mathbf{v}$ ($\alpha=0.85$) to rank root-cause hypotheses $(H_1, H_2, H_3)$.
+    \item[\textbf{FR-5 (Multi-Domain MCP Server Tool Execution):}] The Central Autonomous Agent (\texttt{:9100}) shall dispatch structured JSON-RPC/REST remediation requests to four specialized Model Context Protocol servers: \texttt{mcp-dcops} (\texttt{:8001}) for bare-metal thermal/governor control, \texttt{mcp-devops} (\texttt{:8002}) for OpenStack OVS Geneve tunnel healing and Kubernetes Open5GS pod recovery, \texttt{mcp-secops} (\texttt{:8003}) for Wazuh active firewall blocking, and \texttt{mcp-aiops} (\texttt{:8004}) for causal diagnostics.
+    \item[\textbf{FR-6 (Automated SDN, 5G Core, Compute, and Database Self-Healing):}] The system shall autonomously execute verified surgical remediations including: (a) clearing OVS Geneve packet drops and resetting BFD tunnels on \texttt{br-int}, (b) restarting stalled \texttt{open5gs-upf} pods and re-binding \texttt{ogstun} GTP-U interfaces, (c) throttling noisy-neighbor CPU processes via Linux \texttt{cgroups}/\texttt{renice}, (d) adapting USRP B210 RF gain/MCS schedules, and (e) promoting OpenStack MySQL Group Replication nodes back to writable primary state upon read-only lockouts.
+    \item[\textbf{FR-7 (Wazuh SIEM Active Cyber-Defense Integration):}] The system shall ingest real-time security alerts from Wazuh Manager v4.8.0 across all 4 enrolled agents (Dell R760xs \texttt{000}, \texttt{compute-pc1} \texttt{001}, \texttt{compute-pc2} \texttt{002}, and Windows Jump Host \texttt{003}) and automatically trigger \texttt{firewall-drop} active responses against offending source IPs upon detecting SSH brute-force attacks (Rule 5712, Level $\ge 10$).
+    \item[\textbf{FR-8 (Asynchronous Qwen3-14B Executive Post-Mortem Generation):}] Following data-plane restoration, the system shall asynchronously invoke the \texttt{qwen3:14b} LLM hosted on the Windows Jump Host (\texttt{http://10.0.0.21:11434}) to generate a structured Markdown post-mortem report detailing the executive summary, causal propagation chain, MCP commands executed, and preventive recommendations, with a deterministic template fallback if the LLM host is unreachable.
+\end{description}
+
+Table \ref{tab:fr_matrix} summarizes the Functional Requirements Traceability Matrix mapping each requirement to its implementing software module and verification endpoint.
+
+\begin{table}[!htb]
+\centering
+\caption{Functional Requirements Traceability Matrix Across System Modules.}
+\label{tab:fr_matrix}
+\renewcommand{\arraystretch}{1.22}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}llp{5.2cm}p{4.8cm}l@{}}
+\toprule
+\textbf{Req. ID} & \textbf{Subsystem Domain} & \textbf{Core Implementation File / Service} & \textbf{Verification Mechanism} & \textbf{Status} \\ \midrule
+FR-1 & Telemetry Collector & \texttt{/home/hpe/telemetry/collector.py} & 73,413 rows in \texttt{5g\_telco\_metrics.jsonl} & Verified \\
+FR-2 & Anomaly Detector & \texttt{/home/hpe/xie/engine/rca\_engine.py} & Z-Score ($|z|>3$) \& 200-Tree Balanced RF & Verified \\
+FR-3 & Episodic Memory & \texttt{/home/hpe/xie/memory/chroma\_store.py} & 2,731 episodes in ChromaDB HNSW store & Verified \\
+FR-4 & Causal Graph Critic & \texttt{/home/hpe/xie/engine/rca\_engine.py} & VAR(2) F-test + Reversed-DAG PPR ($\alpha=0.85$) & Verified \\
+FR-5 & MCP Control Plane & \texttt{/home/hpe/mcp-\{dc,dev,sec,ai\}ops/} & HTTP 200 OK on ports \texttt{8001}--\texttt{8004}, \texttt{9100} & Verified \\
+FR-6 & Surgical Remediation & \texttt{/home/hpe/agent/autonomous\_agent.py} & 1,857 verified recoveries in audit log & Verified \\
+FR-7 & Active Cyber-Defense & \texttt{/var/ossec/logs/active-responses.log} & 114,479 alerts; Rule 5712 \texttt{firewall-drop} & Verified \\
+FR-8 & LLM Post-Mortems & \texttt{/home/hpe/agent/llm\_reporter.py} & Live \texttt{qwen3:14b} Markdown reports & Verified \\ \bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\subsection*{Non-Functional Requirements}
+\begin{description}[leftmargin=1.2cm, style=nextline]
+    \item[\textbf{NFR-1 (Sub-Second Detection Latency -- MTTD):}] Fault detection, Z-score standardization, and initial anomaly flagging shall complete within $\le 500\text{ ms}$ of telemetry arrival (median empirical $\text{MTTD} = 420\text{ ms}$) to prevent cascading customer impact.
+    \item[\textbf{NFR-2 (Sub-3-Second End-to-End Resolution -- MTTR):}] Complete data-plane fault diagnosis, MCP tool dispatch, and service restoration shall complete within $\le 3.0\text{ s}$ (mean empirical $\text{MTTR} = 2.41\text{ s}$), representing a $>99\%$ reduction compared to manual SRE operations.
+    \item[\textbf{NFR-3 (High Availability \& Self-Watchdog Resilience):}] The autonomous monitoring and remediation stack shall maintain $\ge 99.95\%$ availability, enforced by a dedicated systemd watchdog (\texttt{self\_healing\_watchdog.sh}) that audits OpenStack MySQL primary state, OVS bridges, Kubernetes pods, and MCP ports every 60 seconds.
+    \item[\textbf{NFR-4 (Deterministic Safety Guardrails \& Cooldown Governance):}] Automated remediation actions shall never execute arbitrary unvalidated shell strings. Every MCP tool call must map to a pre-approved, parameterized command template and obey a mandatory per-component cooldown window ($\Delta t_{\text{cool}} = 30\text{ s}$) to prevent oscillation loops.
+    \item[\textbf{NFR-5 (Scalability Across Multi-Node \& Multi-GPU Topologies):}] The telemetry schema and Reversed-DAG PPR solver ($O(K \cdot |E_{\text{rev}}|)$ complexity with $K \le 30$ iterations) shall scale linearly across $1000+$ virtualized ports and container pods while sustaining 951.82 GFLOPS of concurrent GPU/AMX background compute load.
+    \item[\textbf{NFR-6 (Graceful Degradation Under LLM Network Partition):}] If the external Ollama LLM inference host (\texttt{10.0.0.21:11434}) experiences network latency or downtime, data-plane self-healing shall remain 100\% unaffected, and the reporter module shall seamlessly fall back to a deterministic causal Markdown generator.
+\end{description}
+
+Table \ref{tab:telemetry_schema} details the 54-feature cross-layer telemetry schema ingested every 5 seconds across the five operational planes.
+
+\begin{table}[!htb]
+\centering
+\caption{54-Dimensional Cross-Layer Telemetry Vector Schema ($\mathbf{x}(t) \in \mathbb{R}^{54}$) Polled Every 5 Seconds.}
+\label{tab:telemetry_schema}
+\renewcommand{\arraystretch}{1.2}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}llp{5.0cm}p{5.0cm}l@{}}
+\toprule
+\textbf{Feature Indices} & \textbf{Operational Plane} & \textbf{Representative Telemetry Metrics} & \textbf{Primary Data Source / Exporter} & \textbf{Normal Baseline Range} \\ \midrule
+$x_1 \dots x_{12}$ & Plane 1: 5G SDR RAN (USRP B210) & \texttt{dl\_sinr\_db}, \texttt{ul\_sinr\_db}, \texttt{rsrp\_dbm}, \texttt{dl\_bler}, \texttt{ul\_bler}, \texttt{dl\_mcs}, \texttt{cqi}, \texttt{rf\_tx\_gain}, \texttt{usrp\_underruns} & \texttt{srsgnb} \& \texttt{srsue} ZeroMQ / console metrics + \texttt{uhd\_usrp\_probe} & SINR: $21.5$--$25.2\text{ dB}$, RSRP: $-76\text{ dBm}$, BLER $< 1.5\%$ \\
+$x_{13} \dots x_{24}$ & Plane 2: OpenStack \& OVN/OVS SDN & \texttt{ovs\_dropped\_pkts}, \texttt{geneve\_rx\_err}, \texttt{bfd\_flap\_cnt}, \texttt{nova\_vm\_active}, \texttt{mysql\_ro\_flag}, \texttt{qrouter\_latency} & \texttt{ovs-vsctl}, \texttt{ovn-nbctl}, Kolla MariaDB status, Neutron namespace probes & Drops: $0\text{ pkts/s}$, BFD: \texttt{up}, Active VMs: $3$, MySQL \texttt{RO=0} \\
+$x_{25} \dots x_{36}$ & Plane 3: Magnum K8s \& Open5GS / Boutique & \texttt{upf\_sessions}, \texttt{amf\_reg\_ues}, \texttt{upf\_tp\_mbps}, \texttt{pod\_restarts}, \texttt{boutique\_http\_ms}, \texttt{boutique\_5xx\_rate} & \texttt{kubectl} API (\texttt{192.168.100.72:6443}), Open5GS Prometheus metrics, HTTP probes & UPF: $380$--$450\text{ Mbps}$, Pods Ready: $24/24$, HTTP: $42\text{ ms}$ \\
+$x_{37} \dots x_{46}$ & Plane 4: Bare-Metal CPU \& Dual-GPU Compute & \texttt{dell\_cpu\_pct}, \texttt{dell\_load1}, \texttt{dell\_amx\_gflops}, \texttt{gpu0\_util\_pct}, \texttt{gpu1\_util\_pct}, \texttt{cluster\_gflops} & \texttt{/proc/stat}, \texttt{gpu\_workload\_metrics.json}, Intel DRM \texttt{/dev/dri/renderD128} & Dell CPU: $27.2\%$, GPU0/1: $76.8\% / 78.2\%$, Total: $951.82\text{ GFLOPS}$ \\
+$x_{47} \dots x_{54}$ & Plane 5: Wazuh SIEM \& Juniper Mist Edge & \texttt{wazuh\_alert\_rate}, \texttt{ssh\_fail\_cnt}, \texttt{level10\_alerts}, \texttt{active\_blocks}, \texttt{mist\_ap\_sle}, \texttt{srx\_wan\_rtt\_ms} & Wazuh API (\texttt{:55000}), \texttt{alerts.json}, \texttt{active-responses.log}, Mist REST API & Level $\ge 10$ alerts: $0/\text{min}$, Enrolled Agents: $4/4$ Active \\ \bottomrule
+\end{tabular}%
+}
+\end{table}

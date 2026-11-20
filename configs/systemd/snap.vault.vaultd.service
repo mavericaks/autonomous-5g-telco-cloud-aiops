@@ -1,0 +1,23 @@
+[Unit]
+# Auto-generated, DO NOT EDIT
+Description=Service for snap application vault.vaultd
+Requires=snap-vault-2487.mount
+Wants=network.target
+After=snap-vault-2487.mount network.target snapd.apparmor.service
+X-Snappy=yes
+
+[Service]
+EnvironmentFile=-/etc/environment
+ExecStart=/usr/bin/snap run vault.vaultd
+SyslogIdentifier=vault.vaultd
+Restart=on-failure
+WorkingDirectory=/var/snap/vault/2487
+ExecStop=/usr/bin/snap run --command=stop vault.vaultd
+ExecReload=/usr/bin/snap run --command=reload vault.vaultd
+TimeoutStopSec=30s
+Type=simple
+KillMode=process
+KillSignal=SIGTERM
+
+[Install]
+WantedBy=multi-user.target

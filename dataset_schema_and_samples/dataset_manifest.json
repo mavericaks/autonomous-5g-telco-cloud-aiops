@@ -1,0 +1,219 @@
+{
+  "last_updated_utc": "2026-11-20T18:43:47.808278+00:00",
+  "daemon_service": "omni-crosslayer-harvester.service",
+  "status": "ACTIVE_STREAMING",
+  "sampling_interval_sec": 5.0,
+  "storage_location": "/data/cross_layer_dataset",
+  "deep_storage_16tb_vault": "/data_16tb/cross_layer_dataset_vault",
+  "symlinks": [
+    "/home/hpe/HPE/cross_layer_dataset",
+    "/home/hpe/cross_layer_dataset",
+    "/home/hpe/telemetry/dataset/cross_layer_dataset",
+    "/data/cross_layer_dataset/06_16tb_deep_storage_vault"
+  ],
+  "timeseries_dataset": {
+    "total_parameters_per_tick": 368,
+    "total_rows_captured": 90482,
+    "total_datapoint_cells": 33297376,
+    "rows_by_fault_class": {
+      "compute_cpu_exhaustion": 1759,
+      "k8s_container_crash": 240,
+      "nominal": 85541,
+      "ovn_sdn_latency_loss": 277,
+      "rf_path_loss_attenuation": 2665
+    },
+    "files": {
+      "jsonl_stream": {
+        "path": "/data/cross_layer_dataset/01_timeseries_metrics/omni_cross_layer_metrics.jsonl",
+        "size_mb": 106.59
+      },
+      "csv_table": {
+        "path": "/data/cross_layer_dataset/01_timeseries_metrics/omni_cross_layer_metrics.csv",
+        "size_mb": 169.13
+      },
+      "pandas_pickle": {
+        "path": "/data/cross_layer_dataset/01_timeseries_metrics/omni_metrics_dataframe.pkl",
+        "size_mb": 256.08
+      },
+      "numpy_tensors_npz": {
+        "path": "/data/cross_layer_dataset/01_timeseries_metrics/training_tensors_X_y.npz",
+        "size_mb": 41.77
+      }
+    }
+  },
+  "logs_alerts_events_dataset": {
+    "total_schema_fields": 14,
+    "total_events_captured": 9341133,
+    "events_by_plane_id": {
+      "1": 5106667,
+      "2": 1112795,
+      "3": 1280117,
+      "4": 261677,
+      "5": 1177061,
+      "6": 402816
+    },
+    "files": {
+      "unified_jsonl": {
+        "path": "/data/cross_layer_dataset/02_logs_alerts_events/omni_logs_alerts_stream.jsonl",
+        "size_mb": 104.86
+      },
+      "unified_csv": {
+        "path": "/data/cross_layer_dataset/02_logs_alerts_events/omni_logs_alerts_stream.csv",
+        "size_mb": 3065.7
+      },
+      "by_plane_jsonl": {
+        "1": {
+          "path": "/data/cross_layer_dataset/02_logs_alerts_events/by_plane/plane1_hardware_kernel_os.jsonl",
+          "size_mb": 2684.59
+        },
+        "2": {
+          "path": "/data/cross_layer_dataset/02_logs_alerts_events/by_plane/plane2_openstack_kvm_ovn_sdn.jsonl",
+          "size_mb": 673.62
+        },
+        "3": {
+          "path": "/data/cross_layer_dataset/02_logs_alerts_events/by_plane/plane3_k8s_open5gs_microservices.jsonl",
+          "size_mb": 818.54
+        },
+        "4": {
+          "path": "/data/cross_layer_dataset/02_logs_alerts_events/by_plane/plane4_srsran_usrp_5g_phy.jsonl",
+          "size_mb": 145.68
+        },
+        "5": {
+          "path": "/data/cross_layer_dataset/02_logs_alerts_events/by_plane/plane5_wazuh_siem_security_alerts.jsonl",
+          "size_mb": 740.52
+        },
+        "6": {
+          "path": "/data/cross_layer_dataset/02_logs_alerts_events/by_plane/plane6_xie_aiops_gpu_remediation.jsonl",
+          "size_mb": 236.72
+        }
+      }
+    }
+  },
+  "relational_warehouse": {
+    "sqlite_wal_db": "/data/cross_layer_dataset/03_relational_warehouse/cross_layer_warehouse.db",
+    "size_mb": 4272.5,
+    "tables": [
+      "metrics_wide",
+      "logs_alerts_stream",
+      "feature_catalog",
+      "harvester_audit_log"
+    ]
+  },
+  "compressed_partitions": {
+    "archive_dir": "/data/cross_layer_dataset/05_partitions_compressed",
+    "vault_16tb_dir": "/data_16tb/cross_layer_dataset_vault/partitions_compressed",
+    "partition_count": 28,
+    "partitions": [
+      {
+        "file": "05_partitions_compressed/date=2026-11-20/hour=11/metrics_part_20261120_112902.jsonl.gz",
+        "size_mb": 16.81
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-20/hour=09/logs_part_20261120_092235.jsonl.gz",
+        "size_mb": 18.65
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-20/hour=02/logs_part_20261120_025126.jsonl.gz",
+        "size_mb": 18.87
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-20/hour=15/logs_part_20261120_155853.jsonl.gz",
+        "size_mb": 18.59
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-18/hour=04/metrics_part_20261118_045536.jsonl.gz",
+        "size_mb": 16.63
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-18/hour=12/logs_part_20261118_125350.jsonl.gz",
+        "size_mb": 18.73
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-18/hour=19/logs_part_20261118_190029.jsonl.gz",
+        "size_mb": 18.86
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-18/hour=00/logs_part_20261118_005324.jsonl.gz",
+        "size_mb": 18.66
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-18/hour=06/logs_part_20261118_065133.jsonl.gz",
+        "size_mb": 18.81
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-15/hour=22/logs_part_20261115_223906.jsonl.gz",
+        "size_mb": 18.66
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-15/hour=17/logs_part_20261115_172224.jsonl.gz",
+        "size_mb": 17.57
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-15/hour=12/metrics_initial_backfill.jsonl.gz",
+        "size_mb": 2.66
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-15/hour=12/logs_initial_backfill.jsonl.gz",
+        "size_mb": 0.82
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-17/hour=13/logs_part_20261117_130839.jsonl.gz",
+        "size_mb": 18.71
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-17/hour=07/logs_part_20261117_072153.jsonl.gz",
+        "size_mb": 18.64
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-17/hour=01/logs_part_20261117_014404.jsonl.gz",
+        "size_mb": 18.5
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-17/hour=03/metrics_part_20261117_035328.jsonl.gz",
+        "size_mb": 16.56
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-17/hour=19/logs_part_20261117_190004.jsonl.gz",
+        "size_mb": 18.83
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-19/hour=13/logs_part_20261119_135047.jsonl.gz",
+        "size_mb": 19.07
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-19/hour=07/metrics_part_20261119_072835.jsonl.gz",
+        "size_mb": 16.72
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-19/hour=07/logs_part_20261119_072642.jsonl.gz",
+        "size_mb": 18.63
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-19/hour=01/logs_part_20261119_011015.jsonl.gz",
+        "size_mb": 18.58
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-19/hour=20/logs_part_20261119_202111.jsonl.gz",
+        "size_mb": 19.06
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-16/hour=09/logs_part_20261116_091746.jsonl.gz",
+        "size_mb": 18.61
+      },
+      {
+        "file": "05_partitions_compressed/date=2026-11-16/hour=04/metrics_part_20261116_041629.jsonl.gz",
+        "size_mb": 11.43
+      }
+    ]
+  },
+  "sustainability_and_disk_health": {
+    "tier1_hot_mount": "/data (/dev/sda1 - 2.95 TB)",
+    "tier2_deep_vault_mount": "/data_16tb (/dev/mapper/cinder--volumes-lv_ai_dataset_16tb - 14.0 TB)",
+    "combined_total_capacity_gb": 17173.76,
+    "combined_used_capacity_gb": 277.72,
+    "combined_free_capacity_gb": 16746.01,
+    "combined_used_pct": 1.62,
+    "high_watermark_pct": 85.0,
+    "sustainability_status": "HEALTHY (16746.01 GB / 16.35 TB Free across 16.9 TB Enterprise RAID Pool)"
+  }
+}

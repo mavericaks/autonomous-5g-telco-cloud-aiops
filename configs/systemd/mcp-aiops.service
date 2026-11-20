@@ -1,0 +1,14 @@
+[Unit]
+Description=MCP-AIOps XIE Causal PPR and ChromaDB Server (:8104)
+After=network.target
+
+[Service]
+Type=simple
+User=hpe
+WorkingDirectory=/home/hpe
+ExecStart=/usr/bin/python3 /home/hpe/mcp_http_daemon.py mcp-aiops /home/hpe/mcp-aiops/src/server.py 8104
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

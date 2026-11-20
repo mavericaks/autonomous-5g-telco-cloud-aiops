@@ -1,0 +1,14 @@
+[Unit]
+Description=MCP-DCOps DataCenter OpenStack and OVN Server (:8101)
+After=network.target
+
+[Service]
+Type=simple
+User=hpe
+WorkingDirectory=/home/hpe
+ExecStart=/usr/bin/python3 /home/hpe/mcp_http_daemon.py mcp-dcops /home/hpe/mcp-dcops/src/server.py 8101
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,19 @@
+[Unit]
+# Auto-generated, DO NOT EDIT
+Description=Service for snap application maas.supervisor
+Requires=snap-maas-42604.mount
+Wants=network.target
+After=snap-maas-42604.mount network.target snapd.apparmor.service
+X-Snappy=yes
+
+[Service]
+EnvironmentFile=-/etc/environment
+ExecStart=/usr/bin/snap run maas.supervisor
+SyslogIdentifier=maas.supervisor
+Restart=on-failure
+WorkingDirectory=/var/snap/maas/42604
+TimeoutStopSec=30s
+Type=simple
+
+[Install]
+WantedBy=multi-user.target

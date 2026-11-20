@@ -1,0 +1,11 @@
+[Unit]
+Description=ARP Reply Frame Padder for Broadcom Switch Compatibility
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 -u /usr/local/bin/arp-padder.py
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

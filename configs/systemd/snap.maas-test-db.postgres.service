@@ -1,0 +1,19 @@
+[Unit]
+# Auto-generated, DO NOT EDIT
+Description=Service for snap application maas-test-db.postgres
+Requires=snap-maas\x2dtest\x2ddb-148.mount
+Wants=network.target
+After=snap-maas\x2dtest\x2ddb-148.mount network.target snapd.apparmor.service
+X-Snappy=yes
+
+[Service]
+EnvironmentFile=-/etc/environment
+ExecStart=/usr/bin/snap run maas-test-db.postgres
+SyslogIdentifier=maas-test-db.postgres
+Restart=on-failure
+WorkingDirectory=/var/snap/maas-test-db/148
+TimeoutStopSec=30s
+Type=simple
+
+[Install]
+WantedBy=multi-user.target

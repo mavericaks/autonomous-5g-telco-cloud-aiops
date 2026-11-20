@@ -1,0 +1,14 @@
+[Unit]
+Description=Multi-Node CPU & Dual-GPU Tensor/Matrix Workload Engine
+After=network.target
+
+[Service]
+Type=simple
+User=hpe
+WorkingDirectory=/home/hpe
+ExecStart=/usr/bin/python3 /home/hpe/gpu_and_cpu_workload.py
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,120 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+# ==============================================================================
+# AUTONOMOUS 5G SA TELCO-CLOUD & AGENTIC AIOPS — PORTABLE VAGRANT CLUSTER
+# ==============================================================================
+# Reconstructs the entire 3-Node, 6-Plane Cyber-Physical Testbed on ANY machine
+# (Laptop, Workstation, or Cloud Server) even after the physical lab is dismantled!
+#
+# Usage:
+#   git clone <your-github-repo-url> autonomous-5g-telco-cloud-aiops
+#   cd autonomous-5g-telco-cloud-aiops
+#   vagrant up
+#
+# Topology Provisioned Automatically:
+#   1. dell-controller (10.0.0.10 / VLAN20 & 10.10.10.2 / VLAN10)
+#      - OpenStack/Cloud Gateway, OVS/OVN Geneve Hub (br-int, br-data, br-ex)
+#      - Kubernetes (K3s) running 13 Open5GS 5G SA Core NFs & 12 Online Boutique Pods
+#      - Wazuh SIEM Alert Engine, Prometheus (:9090), Grafana (:3000), Exporter (:9105)
+#      - XIE Core v1.0 (Random Forest, VAR(2) Granger, Reversed-DAG PPR, ChromaDB HNSW)
+#      - 4 FastMCP Servers (:8101 DCOps, :8102 DevOps, :8103 SecOps, :8104 AIOps)
+#      - 6-Plane 368-Parameter Dataset Harvester (omni-crosslayer-harvester.service)
+#   2. compute-pc1 (10.10.10.4 / VLAN10)
+#      - OVS/OVN Geneve BFD Tunnel to dell-controller & compute-pc2
+#      - srsRAN 5G NR Band n78 gNodeB (Auto-detects USRP B210 USB or ZeroMQ Virtual RF)
+#      - GPU0 Tensor Workload Engine & Live Console Dashboard (node-monitor-tty1)
+#   3. compute-pc2 (10.10.10.5 / VLAN10 & 10.0.0.24 / VLAN20)
+#      - OVS/OVN Geneve BFD Tunnel to dell-controller & compute-pc1
+#      - srsRAN 5G SA Multi-UEs (srsue1, srsue2 in netns ue1, ue2 over USRP or ZeroMQ RF)
+#      - GPU1 Tensor Workload Engine & Live Console Dashboard (node-monitor-tty1)
+# ==============================================================================
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/jammy64"
+  config.vm.synced_folder ".", "/vagrant", disabled: false
+
+  # ----------------------------------------------------------------------------
+  # NODE 1: Primary Controller, Cloud, K8s 5G Core & XIE AIOps Node
+  # ----------------------------------------------------------------------------
+  config.vm.define "dell-controller", primary: true do |ctrl|
+    ctrl.vm.hostname = "hpe-PowerEdge-R760xs"
+    ctrl.vm.network "private_network", ip: "10.0.0.10", netmask: "255.255.255.0"   # VLAN 20 Operations / External
+    ctrl.vm.network "private_network", ip: "10.10.10.2", netmask: "255.255.255.0"  # VLAN 10 Undercloud / OVN Geneve
+
+    # Forward all key dashboards to host machine
+    ctrl.vm.network "forwarded_port", guest: 3000, host: 3000, auto_correct: true  # Grafana Dashboards
+    ctrl.vm.network "forwarded_port", guest: 9090, host: 9090, auto_correct: true  # Prometheus UI
+    ctrl.vm.network "forwarded_port", guest: 9105, host: 9105, auto_correct: true  # Multi-Domain Exporter
+    ctrl.vm.network "forwarded_port", guest: 8085, host: 8085, auto_correct: true  # Cloud & K8s Portal
+    ctrl.vm.network "forwarded_port", guest: 8101, host: 8101, auto_correct: true  # MCP-DCOps
+    ctrl.vm.network "forwarded_port", guest: 8102, host: 8102, auto_correct: true  # MCP-DevOps
+    ctrl.vm.network "forwarded_port", guest: 8103, host: 8103, auto_correct: true  # MCP-SecOps
+    ctrl.vm.network "forwarded_port", guest: 8104, host: 8104, auto_correct: true  # MCP-AIOps
+
+    ctrl.vm.provider "virtualbox" do |vb|
+      vb.name = "Autonomous-5G-AIOps-Dell-Controller"
+      vb.memory = "8192"
+      vb.cpus = 4
+    end
+
+    ctrl.vm.provider "libvirt" do |lv|
+      lv.memory = 8192
+      lv.cpus = 4
+    end
+
+    ctrl.vm.provision "shell", inline: <<-SHELL
+      export DEBIAN_FRONTEND=noninteractive
+      bash /vagrant/portable_anywhere_reconstructor/spin_up_anywhere.sh --role controller
+    SHELL
+  end
+
+  # ----------------------------------------------------------------------------
+  # NODE 2: Compute-PC1 (10.10.10.4) — OVN SDN + 5G gNodeB (USRP / ZeroMQ RF) + GPU0
+  # ----------------------------------------------------------------------------
+  config.vm.define "compute-pc1" do |pc1|
+    pc1.vm.hostname = "compute-pc1"
+    pc1.vm.network "private_network", ip: "10.10.10.4", netmask: "255.255.255.0"  # VLAN 10 Undercloud / OVN Geneve
+
+    pc1.vm.provider "virtualbox" do |vb|
+      vb.name = "Autonomous-5G-AIOps-Compute-PC1-gNodeB"
+      vb.memory = "4096"
+      vb.cpus = 2
+    end
+
+    pc1.vm.provider "libvirt" do |lv|
+      lv.memory = 4096
+      lv.cpus = 2
+    end
+
+    pc1.vm.provision "shell", inline: <<-SHELL
+      export DEBIAN_FRONTEND=noninteractive
+      bash /vagrant/portable_anywhere_reconstructor/spin_up_anywhere.sh --role compute-pc1
+    SHELL
+  end
+
+  # ----------------------------------------------------------------------------
+  # NODE 3: Compute-PC2 (10.10.10.5) — OVN SDN + 5G Multi-UEs (USRP / ZeroMQ RF) + GPU1
+  # ----------------------------------------------------------------------------
+  config.vm.define "compute-pc2" do |pc2|
+    pc2.vm.hostname = "compute-pc2"
+    pc2.vm.network "private_network", ip: "10.10.10.5", netmask: "255.255.255.0"  # VLAN 10 Undercloud / OVN Geneve
+    pc2.vm.network "private_network", ip: "10.0.0.24", netmask: "255.255.255.0"   # VLAN 20 Dual-Access Wi-Fi Emulation
+
+    pc2.vm.provider "virtualbox" do |vb|
+      vb.name = "Autonomous-5G-AIOps-Compute-PC2-MultiUE"
+      vb.memory = "4096"
+      vb.cpus = 2
+    end
+
+    pc2.vm.provider "libvirt" do |lv|
+      lv.memory = 4096
+      lv.cpus = 2
+    end
+
+    pc2.vm.provision "shell", inline: <<-SHELL
+      export DEBIAN_FRONTEND=noninteractive
+      bash /vagrant/portable_anywhere_reconstructor/spin_up_anywhere.sh --role compute-pc2
+    SHELL
+  end
+end
+

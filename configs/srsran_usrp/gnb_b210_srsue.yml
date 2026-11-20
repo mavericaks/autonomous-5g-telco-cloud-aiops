@@ -1,0 +1,28 @@
+amf:
+  addr: 192.168.100.174
+  bind_addr: 10.10.10.4
+cell_cfg:
+  band: 3
+  channel_bandwidth_MHz: 10
+  common_scs: 15
+  dl_arfcn: 368500
+  pdcch:
+    dedicated:
+      dci_format_0_1_and_1_1: false
+      ss2_type: common
+  plmn: '99970'
+  tac: 1
+log:
+  all_level: info
+  filename: /tmp/gnb.log
+pcap:
+  mac_enable: enable
+  mac_filename: /tmp/gnb_mac.pcap
+  ngap_enable: enable
+  ngap_filename: /tmp/gnb_ngap.pcap
+ru_sdr:
+  device_args: serial=34B18C8
+  device_driver: uhd
+  rx_gain: 74
+  srate: 11.52
+  tx_gain: 85

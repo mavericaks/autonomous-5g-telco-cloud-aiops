@@ -1,0 +1,28 @@
+ba029b0d-b327-41ce-aef3-dc4ab34ae4af
+    Manager "ptcp:6640:127.0.0.1"
+        is_connected: true
+    Bridge br-int
+        fail_mode: secure
+        datapath_type: system
+        Port tap06ac315d-40
+            Interface tap06ac315d-40
+        Port br-int
+            Interface br-int
+                type: internal
+        Port tape7a12296-9e
+            Interface tape7a12296-9e
+        Port ovn0-compu-0
+            Interface ovn0-compu-0
+                type: geneve
+                options: {csum="true", key=flow, remote_ip="10.10.10.5"}
+                bfd_status: {diagnostic="Control Detection Time Expired", flap_count="1", forwarding="true", remote_diagnostic="No Diagnostic", remote_state=up, state=up}
+        Port ovn0-compu-1
+            Interface ovn0-compu-1
+                type: geneve
+                options: {csum="true", key=flow, remote_ip="10.10.10.4"}
+                bfd_status: {diagnostic="Neighbor Signaled Session Down", flap_count="9", forwarding="true", remote_diagnostic="Control Detection Time Expired", remote_state=up, state=up}
+        Port tap0aea5b04-df
+            Interface tap0aea5b04-df
+        Port tapb23cf504-47
+            Interface tapb23cf504-47
+    ovs_version: "3.1.3"

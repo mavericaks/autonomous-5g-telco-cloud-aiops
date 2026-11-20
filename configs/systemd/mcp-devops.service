@@ -1,0 +1,14 @@
+[Unit]
+Description=MCP-DevOps Magnum Kubernetes and Open5GS Server (:8102)
+After=network.target
+
+[Service]
+Type=simple
+User=hpe
+WorkingDirectory=/home/hpe
+ExecStart=/usr/bin/python3 /home/hpe/mcp_http_daemon.py mcp-devops /home/hpe/mcp-devops/src/server.py 8102
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

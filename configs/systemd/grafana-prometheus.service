@@ -1,0 +1,14 @@
+[Unit]
+Description=Live Grafana (:3000) & Prometheus (:9090) Observability Stack
+After=network.target multi-domain-exporter.service
+
+[Service]
+Type=simple
+User=hpe
+WorkingDirectory=/home/hpe
+ExecStart=/usr/bin/python3 /home/hpe/grafana_and_prometheus_server.py
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

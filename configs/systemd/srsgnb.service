@@ -1,0 +1,16 @@
+[Unit]
+Description=srsRAN Project 5G Standalone gNodeB
+After=network.target network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/ubuntu/5g-ran
+ExecStart=/usr/bin/gnb -c /home/ubuntu/5g-ran/gnb_b210_srsue.yml
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

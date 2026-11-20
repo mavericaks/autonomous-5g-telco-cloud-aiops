@@ -1,0 +1,16 @@
+[Unit]
+Description=Autonomous Closed-Loop Self-Healing AIOps Agent
+After=network.target 5g-telemetry.service
+
+[Service]
+Type=simple
+User=hpe
+WorkingDirectory=/home/hpe/agent
+ExecStart=/usr/bin/python3 /home/hpe/agent/self_healing_agent.py
+Restart=always
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

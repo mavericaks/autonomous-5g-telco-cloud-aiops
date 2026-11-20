@@ -1,0 +1,18 @@
+_uuid               : cf343adc-e8d2-45f5-844c-a5b4dbab7bfd
+bridges             : [b9f58bcc-687e-422c-a0b5-c639388fcc8e]
+cur_cfg             : 18
+datapath_types      : [netdev, system]
+datapaths           : {system=77be24bd-558f-4d20-b73d-a0e11de76ed2}
+db_version          : "8.3.1"
+dpdk_initialized    : false
+dpdk_version        : none
+external_ids        : {hostname=compute-pc1.maas, ovn-encap-ip="10.10.10.4", ovn-encap-type=geneve, ovn-match-northd-version=True, ovn-monitor-all=False, ovn-remote="ssl:10.10.10.15:6642,ssl:10.10.10.18:6642,ssl:10.10.10.19:6642", rundir="/var/run/openvswitch", system-id=compute-pc1.maas}
+iface_types         : [afxdp, afxdp-nonpmd, bareudp, erspan, geneve, gre, gtpu, internal, ip6erspan, ip6gre, lisp, patch, stt, system, tap, vxlan]
+manager_options     : [b635daa1-0934-4260-bda9-64ba144d19d8]
+next_cfg            : 18
+other_config        : {ovn-chassis-idx-compute-pc1.maas="0", ovn-chassis-idx-e390d3e6-c931-4755-8443-4a03026b64b5="", vlan-limit="0"}
+ovs_version         : "3.1.3"
+ssl                 : 3f50b187-e93d-4144-a269-e5d818d08f19
+statistics          : {}
+system_type         : ubuntu
+system_version      : "22.04"

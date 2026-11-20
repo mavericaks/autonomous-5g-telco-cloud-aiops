@@ -1,0 +1,22 @@
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp1s0:
+      match:
+        macaddress: "00:e0:21:84:f3:61"
+      set-name: enp1s0
+      addresses:
+        - 10.10.10.5/24
+      routes:
+        - to: default
+          via: 10.10.10.2
+      nameservers:
+        addresses: [10.10.10.2]
+        search: [maas]
+      mtu: 1500
+---WIFI_VLAN20---
+3: wlp2s0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default qlen 1000
+    link/ether 20:79:18:c0:85:19 brd ff:ff:ff:ff:ff:ff
+    inet 10.0.0.24/24 scope global wlp2s0
+       valid_lft forever preferred_lft forever

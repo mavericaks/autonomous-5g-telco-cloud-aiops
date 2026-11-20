@@ -1,0 +1,51 @@
+version: "3.9"
+
+# ==============================================================================
+# AUTONOMOUS 5G SA TELCO-CLOUD & AGENTIC AIOPS — DOCKER COMPOSE DIGITAL TWIN
+# ==============================================================================
+# Spins up the complete 6-Plane Control, Observability, XIE Causal AIOps, 4-MCP,
+# and 368-Parameter Dataset Harvester stack in containers on ANY laptop or cloud VM.
+#
+# Usage:
+#   cd portable_anywhere_reconstructor
+#   docker compose up -d
+# ==============================================================================
+
+services:
+  autonomous-5g-aiops-controller:
+    image: python:3.10-slim
+    container_name: hpe-5g-aiops-controller
+    hostname: hpe-PowerEdge-R760xs
+    working_dir: /workspace
+    volumes:
+      - ..:/workspace
+      - cross_layer_dataset_volume:/data/cross_layer_dataset
+    ports:
+      - "3000:3000"   # Grafana Enterprise Dashboards
+      - "9090:9090"   # Prometheus Time-Series Server
+      - "9105:9105"   # Unified Multi-Domain Exporter
+      - "8085:8085"   # Cloud & Kubernetes Portal
+      - "8101:8101"   # MCP-DCOps Server
+      - "8102:8102"   # MCP-DevOps Server
+      - "8103:8103"   # MCP-SecOps Server
+      - "8104:8104"   # MCP-AIOps Server
+    command: >
+      bash -c "
+      pip install --quiet numpy pandas scikit-learn scipy joblib chromadb requests urllib3 &&
+      mkdir -p /home/hpe/telemetry/dataset /home/hpe/xie /home/hpe/agent/logs /home/hpe/agent/reports &&
+      cp -rf /workspace/src/xie_core/* /home/hpe/xie/ &&
+      cp -rf /workspace/src/agent/* /home/hpe/agent/ &&
+      python3 /workspace/src/observability_and_gateway/multi_domain_exporter.py &
+      python3 /workspace/src/observability_and_gateway/grafana_and_prometheus_server.py &
+      python3 /workspace/src/mcp_servers/mcp_http_daemon.py mcp-dcops /workspace/src/mcp_servers/mcp_dcops_server.py 8101 &
+      python3 /workspace/src/mcp_servers/mcp_http_daemon.py mcp-devops /workspace/src/mcp_servers/mcp_devops_server.py 8102 &
+      python3 /workspace/src/mcp_servers/mcp_http_daemon.py mcp-secops /workspace/src/mcp_servers/mcp_secops_server.py 8103 &
+      python3 /workspace/src/mcp_servers/mcp_http_daemon.py mcp-aiops /workspace/src/mcp_servers/mcp_aiops_server.py 8104 &
+      python3 /workspace/src/agent/self_healing_agent.py &
+      python3 /workspace/src/dataset_harvester/omni_harvester_daemon.py
+      "
+    restart: unless-stopped
+
+volumes:
+  cross_layer_dataset_volume:
+

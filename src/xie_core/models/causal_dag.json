@@ -1,0 +1,95 @@
+{
+  "version": "1.0-xie-neural-granger",
+  "nodes": [
+    "healthy_pod_count",
+    "pod_restart_count",
+    "cpu_load_pct",
+    "prach_sinr",
+    "cqi",
+    "dropped_packets",
+    "latency_ms"
+  ],
+  "edges": [
+    {
+      "source": "healthy_pod_count",
+      "target": "dropped_packets",
+      "weight": 0.95,
+      "p_value": 0.001,
+      "type": "prior"
+    },
+    {
+      "source": "pod_restart_count",
+      "target": "healthy_pod_count",
+      "weight": 0.9,
+      "p_value": 0.001,
+      "type": "prior"
+    },
+    {
+      "source": "cpu_load_pct",
+      "target": "latency_ms",
+      "weight": 0.85,
+      "p_value": 0.001,
+      "type": "prior"
+    },
+    {
+      "source": "cpu_load_pct",
+      "target": "dropped_packets",
+      "weight": 0.7,
+      "p_value": 0.001,
+      "type": "prior"
+    },
+    {
+      "source": "prach_sinr",
+      "target": "cqi",
+      "weight": 0.92,
+      "p_value": 0.001,
+      "type": "prior"
+    },
+    {
+      "source": "cqi",
+      "target": "dropped_packets",
+      "weight": 0.88,
+      "p_value": 0.001,
+      "type": "prior"
+    },
+    {
+      "source": "dropped_packets",
+      "target": "latency_ms",
+      "weight": 0.82,
+      "p_value": 0.001,
+      "type": "prior"
+    }
+  ],
+  "adjacency": {
+    "healthy_pod_count": {
+      "dropped_packets": 0.95
+    },
+    "pod_restart_count": {
+      "healthy_pod_count": 0.9
+    },
+    "cpu_load_pct": {
+      "dropped_packets": 0.7,
+      "latency_ms": 0.85
+    },
+    "prach_sinr": {
+      "cqi": 0.92
+    },
+    "cqi": {
+      "dropped_packets": 0.88
+    },
+    "dropped_packets": {
+      "latency_ms": 0.82
+    },
+    "latency_ms": {}
+  },
+  "is_dag": true,
+  "topological_order": [
+    "pod_restart_count",
+    "cpu_load_pct",
+    "prach_sinr",
+    "healthy_pod_count",
+    "cqi",
+    "dropped_packets",
+    "latency_ms"
+  ]
+}
